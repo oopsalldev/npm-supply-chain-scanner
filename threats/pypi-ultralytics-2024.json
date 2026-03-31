@@ -1,0 +1,42 @@
+{
+  "id": "NSCS-2024-005",
+  "name": "Ultralytics YOLO Cryptominer Injection",
+  "severity": "critical",
+  "date_discovered": "2024-12-04",
+  "source": "https://www.reversinglabs.com/blog/ultralytics-ai-model-compromised-to-deliver-cryptominers",
+  "description": "Ultralytics YOLO AI library compromised via GitHub Actions cache poisoning. Malicious versions deploy XMRig cryptominer on both CPU and GPU. 50M+ total downloads.",
+  "affected_packages": [
+    {
+      "name": "ultralytics",
+      "compromised_versions": ["8.3.41", "8.3.42"],
+      "safe_versions": ["8.3.40", "8.3.43"],
+      "shasum": {},
+      "note": "Compromised via GitHub Actions workflow exploitation. XMRig miner deployed."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "connect.consrensys.com",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/"
+    }
+  ],
+  "file_artifacts": {
+    "linux": ["/tmp/ultralytics_runner"],
+    "macos": ["/tmp/ultralytics_runner"],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": ["ultralytics_runner"],
+    "network_patterns": ["connect.consrensys.com"]
+  },
+  "remediation": [
+    "Upgrade ultralytics to 8.3.43 or downgrade to 8.3.40",
+    "Check for XMRig/cryptominer processes: ps aux | grep -i xmrig",
+    "Check for unauthorized GPU usage",
+    "Kill any ultralytics_runner processes",
+    "Audit GitHub Actions for cache poisoning vectors"
+  ]
+}

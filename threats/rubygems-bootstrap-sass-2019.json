@@ -1,0 +1,34 @@
+{
+  "id": "NSCS-2019-002",
+  "name": "bootstrap-sass RubyGem Backdoor",
+  "severity": "critical",
+  "date_discovered": "2019-04-04",
+  "source": "https://snyk.io/blog/malicious-remote-code-execution-backdoor-discovered-in-the-popular-bootstrap-sass-ruby-gem/",
+  "description": "bootstrap-sass gem compromised with remote code execution backdoor. Malicious code hidden in a cookie-based RCE mechanism allowing arbitrary command execution on Rails servers.",
+  "affected_packages": [
+    {
+      "name": "bootstrap-sass",
+      "compromised_versions": ["3.2.0.3"],
+      "safe_versions": ["3.2.0.2", "3.4.1"],
+      "shasum": {},
+      "note": "Maintainer account compromised. Backdoor allows RCE via HTTP cookie."
+    }
+  ],
+  "c2_servers": [],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": []
+  },
+  "remediation": [
+    "Upgrade bootstrap-sass to 3.4.1+",
+    "Audit Rails application logs for suspicious cookie-based requests",
+    "Check for unauthorized command execution on servers",
+    "Rotate all server credentials"
+  ]
+}

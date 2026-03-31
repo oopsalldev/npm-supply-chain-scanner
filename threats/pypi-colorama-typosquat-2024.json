@@ -1,0 +1,71 @@
+{
+  "id": "NSCS-2024-004",
+  "name": "Colorama Typosquat Campaigns (Fade Stealer)",
+  "severity": "high",
+  "date_discovered": "2024-03-05",
+  "source": "https://checkmarx.com/zero-post/python-pypi-supply-chain-attack-colorama/",
+  "description": "Multiple typosquat packages targeting the popular colorama library. 2024 campaign deploys Fade Stealer malware stealing browser credentials, Discord tokens, crypto wallets, Telegram sessions, and keystrokes. Earlier 2018 campaign hijacked Bitcoin clipboard addresses.",
+  "affected_packages": [
+    {
+      "name": "colourama",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Entirely malicious typosquat of colorama"
+    },
+    {
+      "name": "colarama",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Typosquat variant"
+    },
+    {
+      "name": "yocolor",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "2024 Fade Stealer campaign"
+    },
+    {
+      "name": "colorama-api",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Typosquat variant"
+    },
+    {
+      "name": "coloramapkgs",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "2024 typosquat variant"
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "files.pypihosted.org",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/",
+      "note": "Fake PyPI mirror (legitimate is files.pythonhosted.org)"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": ["colourama", "colarama", "yocolor", "colorama-api", "coloramapkgs"],
+    "files": [],
+    "network_patterns": ["files.pypihosted.org", "pythanhosted.org"]
+  },
+  "remediation": [
+    "Verify you have legitimate 'colorama' (author: Jonathan Hartley)",
+    "Uninstall any typosquat variants: pip uninstall colourama colarama yocolor colorama-api coloramapkgs",
+    "Rotate browser-saved passwords, Discord tokens, crypto wallet keys",
+    "Check for clipboard monitoring processes on Windows",
+    "Verify pip config points to real pypi.org, not fake mirrors"
+  ]
+}

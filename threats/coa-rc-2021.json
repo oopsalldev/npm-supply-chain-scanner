@@ -40,7 +40,7 @@
   },
   "malicious_indicators": {
     "directories": [],
-    "files": ["compile.js", "compile.bat", "sdd.dll"],
+    "files": ["compile.bat", "sdd.dll"],
     "network_patterns": ["pastorcryptograph.at"]
   },
   "remediation": [

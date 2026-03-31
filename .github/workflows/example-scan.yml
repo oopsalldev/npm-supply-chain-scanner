@@ -1,0 +1,32 @@
+name: Supply Chain Scan
+
+on:
+  pull_request:
+    paths:
+      - 'package-lock.json'
+      - 'yarn.lock'
+      - 'pnpm-lock.yaml'
+      - 'requirements*.txt'
+      - 'Pipfile.lock'
+      - 'Gemfile.lock'
+      - 'Cargo.lock'
+      - 'composer.lock'
+      - 'go.sum'
+  push:
+    branches: [main, master]
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Supply Chain Scan
+        uses: oopsalldev/npm-supply-chain-scanner@main
+        with:
+          scan-path: '.'
+          severity-threshold: 'high'
+          ecosystems: 'all'
+          fail-on-detection: 'true'

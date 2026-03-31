@@ -1,135 +1,201 @@
-# NPM Supply Chain Scanner for Claude Code
+# Supply Chain Scanner
 
-A community-maintained threat database and Claude Code skill set for detecting npm supply chain attacks on your servers and projects.
+Open-source, multi-ecosystem supply chain attack scanner. Detects known compromised packages, malware artifacts, C2 connections, and more across your entire dependency tree.
 
-## What is this?
+Works as a **CLI tool**, **GitHub Action**, **git hook**, **real-time watcher**, and **Claude Code slash command**.
 
-When npm packages get compromised (like the [Axios RAT incident](https://www.stepsecurity.io/blog/axios-compromised-on-npm-malicious-versions-drop-remote-access-trojan)), this tool helps you quickly scan your systems for known threats using Claude Code slash commands.
+> This project was built entirely by [Claude Code](https://claude.ai/claude-code) (Anthropic's AI coding agent) during a live security audit session. The AI analyzed a real server for the Axios RAT compromise, then built this scanner to help the community detect all known supply chain attacks.
 
-## Features
+## Supported Ecosystems
 
-- `/scan` - Full system scan for all known supply chain threats
-- `/add-threat` - Add new threats to the database from advisory URLs
-- `/check-package` - Quick check if a specific package/version is compromised
+| Ecosystem | Lockfiles | Runtime Check |
+|-----------|-----------|---------------|
+| npm | package-lock.json, yarn.lock, pnpm-lock.yaml | node_modules scan |
+| PyPI | requirements.txt, Pipfile.lock, pyproject.toml | pip show |
+| RubyGems | Gemfile.lock | gem list |
+| Cargo | Cargo.lock | - |
+| Composer | composer.lock | - |
+| Go | go.sum | - |
+| NuGet | packages.config, .csproj | - |
 
-## Installation
+## Quick Start
 
-### Option 1: Add as a git submodule (recommended)
-
-```bash
-cd your-project
-git submodule add https://github.com/oopszone/npm-supply-chain-scanner .claude/supply-chain-scanner
-```
-
-Then copy or symlink the commands:
-
-```bash
-# Copy commands to your project's Claude Code commands
-cp -r .claude/supply-chain-scanner/.claude/commands/* .claude/commands/
-```
-
-### Option 2: Clone and symlink globally
+### CLI (runs anywhere)
 
 ```bash
-# Clone the repo
-git clone https://github.com/oopszone/npm-supply-chain-scanner ~/npm-supply-chain-scanner
+git clone https://github.com/oopsalldev/npm-supply-chain-scanner
+cd npm-supply-chain-scanner
 
-# Symlink commands to your project
-ln -s ~/npm-supply-chain-scanner/.claude/commands/scan.md /your-project/.claude/commands/scan.md
-ln -s ~/npm-supply-chain-scanner/.claude/commands/check-package.md /your-project/.claude/commands/check-package.md
-ln -s ~/npm-supply-chain-scanner/.claude/commands/add-threat.md /your-project/.claude/commands/add-threat.md
+# Scan current directory
+./scripts/scan.sh --path /your/project
+
+# Scan entire server
+./scripts/scan.sh --path /
+
+# Update threat database
+./scripts/scan.sh --update
 ```
 
-### Option 3: Quick one-liner per project
+### GitHub Action
+
+Add to `.github/workflows/supply-chain-scan.yml`:
+
+```yaml
+name: Supply Chain Scan
+on:
+  pull_request:
+    paths: ['package-lock.json', 'yarn.lock', 'requirements*.txt', 'Gemfile.lock', 'Cargo.lock', 'go.sum']
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oopsalldev/npm-supply-chain-scanner@main
+        with:
+          fail-on-detection: 'true'
+```
+
+### Git Hook (pre-commit)
 
 ```bash
-# In your project root
-mkdir -p .claude/commands
-curl -sL https://raw.githubusercontent.com/oopszone/npm-supply-chain-scanner/main/.claude/commands/scan.md -o .claude/commands/scan.md
-curl -sL https://raw.githubusercontent.com/oopszone/npm-supply-chain-scanner/main/.claude/commands/check-package.md -o .claude/commands/check-package.md
-curl -sL https://raw.githubusercontent.com/oopszone/npm-supply-chain-scanner/main/.claude/commands/add-threat.md -o .claude/commands/add-threat.md
-mkdir -p threats
-curl -sL https://raw.githubusercontent.com/oopszone/npm-supply-chain-scanner/main/threats/axios-rat-2025.json -o threats/axios-rat-2025.json
+# Install in any git project
+bash <(curl -s https://raw.githubusercontent.com/oopsalldev/npm-supply-chain-scanner/main/scripts/install-hooks.sh)
 ```
 
-## Usage
+Automatically scans when you commit lockfile changes.
 
-Open Claude Code in your project and run:
+### Real-time Watcher
+
+```bash
+# Monitor a directory, scan on lockfile changes
+./scripts/watch.sh /your/project 300  # check every 5 minutes
+
+# With Slack/Discord webhook alerts
+SUPPLY_CHAIN_WEBHOOK="https://hooks.slack.com/..." ./scripts/watch.sh /your/project
+```
+
+### Claude Code Slash Commands
+
+```bash
+# Copy commands to your project
+mkdir -p .claude/commands && mkdir -p threats
+curl -sL https://raw.githubusercontent.com/oopsalldev/npm-supply-chain-scanner/main/.claude/commands/scan.md -o .claude/commands/scan.md
+curl -sL https://raw.githubusercontent.com/oopsalldev/npm-supply-chain-scanner/main/.claude/commands/check-package.md -o .claude/commands/check-package.md
+curl -sL https://raw.githubusercontent.com/oopsalldev/npm-supply-chain-scanner/main/.claude/commands/add-threat.md -o .claude/commands/add-threat.md
+```
+
+Then in Claude Code:
 
 ```
-/scan              # Full system scan against all known threats
-/check-package axios        # Check a specific package
-/check-package axios@1.14.1 # Check a specific version
-/add-threat https://advisory-url.com  # Add a new threat from an article
+/scan                              # Full system scan
+/check-package axios               # Check specific package
+/check-package axios@1.14.1        # Check specific version
+/add-threat https://advisory.url   # Add new threat from article
 ```
 
-### Example scan output
+## What It Checks
 
-```
-## NPM Supply Chain Scan Report
-Date: 2026-03-31
-System: my-server / Linux
-Threats checked: 9
+For every known threat in the database:
 
-### Axios RAT (NSCS-2025-001)
-Severity: critical | Status: CLEAN
-### Nx Credential Stealer (NSCS-2025-002)
-Severity: critical | Status: CLEAN
-### Shai-Hulud Worm (NSCS-2025-003)
-Severity: critical | Status: WARNING - bun_environment.js found
-...
-
-Overall: 8 CLEAN, 1 WARNING - review recommended
-```
+1. **Package versions** - Finds all installed versions, compares against compromised versions
+2. **Malicious packages** - Detects packages that should never exist (e.g. `plain-crypto-js`, `flatmap-stream`)
+3. **File artifacts** - OS-specific malware files left on disk
+4. **Network IOCs** - Active connections to known C2 servers
+5. **Lockfile analysis** - Compromised shasums in lockfiles
+6. **HTML/CDN patterns** - Malicious CDN references (e.g. polyfill.io)
+7. **Ecosystem-specific** - pip packages, gems, crates, etc.
 
 ## Threat Database
 
-Threats are stored as JSON files in the `threats/` directory. Each file contains:
+Community-maintained JSON files in `threats/`. Currently tracking **15 major attacks** across 3 ecosystems:
 
-- Affected package names and compromised versions
-- C2 server indicators (domains, IPs, ports)
-- File system artifacts per OS
-- Network patterns to check
-- Remediation steps
+### npm
 
-### Current threats
+| ID | Name | Year | Severity | What It Does |
+|----|------|------|----------|--------------|
+| NSCS-2025-003 | Shai-Hulud Worm | 2025 | Critical | Self-replicating worm, steals cloud tokens, 1000+ packages |
+| NSCS-2025-002 | Nx Credential Stealer | 2025 | Critical | Steals credentials, AWS admin takeover in 72h |
+| NSCS-2025-001 | Axios RAT | 2025 | Critical | Cross-platform remote access trojan |
+| NSCS-2024-003 | Polyfill.io CDN Hijack | 2024 | Critical | 380K+ websites injected with malware |
+| NSCS-2024-002 | Lottie Player Drainer | 2024 | Critical | Injects crypto wallet drainer into websites |
+| NSCS-2024-001 | Solana web3.js Backdoor | 2024 | Critical | Exfiltrates private keys, $160K stolen |
+| NSCS-2021-002 | coa & rc DanaBot | 2021 | Critical | Drops DanaBot banking trojan |
+| NSCS-2021-001 | ua-parser-js Miner | 2021 | Critical | Cryptominer + password stealer |
+| NSCS-2018-001 | event-stream Backdoor | 2018 | High | Targeted Copay bitcoin wallet theft |
 
-| ID | Name | Severity | Packages | Type |
-|----|------|----------|----------|------|
-| NSCS-2025-003 | Shai-Hulud Worm | Critical | @asyncapi/specs, PostHog, Postman + 1000s | Cloud token stealer, self-replicating worm |
-| NSCS-2025-002 | Nx Credential Stealer | Critical | nx, @nx/devkit, @nx/js, @nx/workspace + more | Credential stealer, AWS takeover |
-| NSCS-2025-001 | Axios RAT | Critical | axios@1.14.1, axios@0.30.4 | Remote access trojan |
-| NSCS-2024-003 | Polyfill.io CDN Hijack | Critical | polyfill.io (CDN, not npm) | Malware injection via CDN |
-| NSCS-2024-002 | Lottie Player Drainer | Critical | @lottiefiles/lottie-player | Crypto wallet drainer |
-| NSCS-2024-001 | Solana web3.js Backdoor | Critical | @solana/web3.js | Private key stealer |
-| NSCS-2021-002 | coa & rc DanaBot | Critical | coa, rc | Banking trojan |
-| NSCS-2021-001 | ua-parser-js Miner | Critical | ua-parser-js | Cryptominer + password stealer |
-| NSCS-2018-001 | event-stream Backdoor | High | event-stream, flatmap-stream | Targeted bitcoin theft |
+### PyPI (Python)
 
-## Contributing
+| ID | Name | Year | Severity | What It Does |
+|----|------|------|----------|--------------|
+| NSCS-2024-005 | Ultralytics YOLO Miner | 2024 | Critical | XMRig cryptominer via GitHub Actions cache poisoning |
+| NSCS-2024-004 | Colorama Typosquats | 2024 | High | Fade Stealer: browser creds, Discord, crypto wallets |
+| NSCS-2022-002 | PyTorch torchtriton | 2022 | Critical | Dependency confusion, steals SSH keys & env vars |
+| NSCS-2022-001 | CTX Account Takeover | 2022 | Critical | Exfiltrates all environment variables |
 
-Found a new npm supply chain attack? Help the community:
+### RubyGems
 
-1. Fork this repo
-2. Use `/add-threat <advisory-url>` to generate the threat JSON, or create one manually in `threats/`
-3. Submit a PR
+| ID | Name | Year | Severity | What It Does |
+|----|------|------|----------|--------------|
+| NSCS-2019-002 | bootstrap-sass Backdoor | 2019 | Critical | Cookie-based RCE on Rails servers |
+| NSCS-2019-001 | rest-client Backdoor | 2019 | Critical | Credential theft + remote code execution |
 
-Or open an issue with the advisory URL and we'll add it.
+### Threat file format
+
+```json
+{
+  "id": "NSCS-YYYY-NNN",
+  "name": "Human-readable name",
+  "severity": "critical",
+  "date_discovered": "2026-01-15",
+  "source": "https://advisory-url",
+  "description": "What the attack does",
+  "affected_packages": [
+    {
+      "name": "package-name",
+      "compromised_versions": ["1.2.3"],
+      "safe_versions": ["1.2.2", "1.2.4"]
+    }
+  ],
+  "c2_servers": [{ "domain": "evil.com", "ip": "1.2.3.4", "port": 443 }],
+  "file_artifacts": { "linux": ["/tmp/malware"], "macos": [], "windows": [] },
+  "malicious_indicators": {
+    "directories": ["malicious-pkg"],
+    "files": ["evil.js"],
+    "network_patterns": ["evil.com"]
+  },
+  "remediation": ["Step 1", "Step 2"]
+}
+```
 
 ## Staying Updated
 
-Star and watch this repo to get notified when new threats are added. We aim to add new threats within hours of public disclosure.
-
 ```bash
-# Update your local copy
-cd npm-supply-chain-scanner
-git pull
+# Update threat database
+cd npm-supply-chain-scanner && git pull
+
+# Or use the built-in updater
+./scripts/scan.sh --update
 ```
+
+Star and watch this repo - we push updates within hours of new attack disclosures.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). The fastest way to add a new threat:
+
+```
+/add-threat https://url-to-advisory
+```
+
+Or open an issue with the advisory URL.
 
 ## License
 
-MIT - Use freely, stay safe.
+MIT (c) 2026 [oops.zone](https://oops.zone)
 
-## Maintained by
+---
 
-[oops.zone](https://oops.zone) - Server management and security tools.
+Built with [Claude Code](https://claude.ai/claude-code) by [oops.zone](https://oops.zone)

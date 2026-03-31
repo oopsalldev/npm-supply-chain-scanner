@@ -1,0 +1,41 @@
+{
+  "id": "NSCS-2022-001",
+  "name": "CTX PyPI Account Takeover (Environment Variable Stealer)",
+  "severity": "critical",
+  "date_discovered": "2022-05-24",
+  "source": "https://python-security.readthedocs.io/pypi-vuln/index-2022-05-24-ctx-domain-takeover.html",
+  "description": "The ctx PyPI package was taken over via expired domain. Malicious versions exfiltrate ALL environment variables (including AWS keys) as base64 to a Heroku app. ~27K malicious downloads.",
+  "affected_packages": [
+    {
+      "name": "ctx",
+      "compromised_versions": ["0.1.2", "0.2.2", "0.2.6"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Package permanently removed from PyPI. All versions between May 14-24, 2022 are malicious."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "anti-theft-web.herokuapp.com",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": ["anti-theft-web.herokuapp.com"]
+  },
+  "remediation": [
+    "Uninstall ctx: pip uninstall ctx",
+    "Rotate ALL environment variable secrets (especially AWS keys)",
+    "Audit AWS CloudTrail for unauthorized API calls",
+    "Package removed from PyPI - no safe version exists"
+  ]
+}

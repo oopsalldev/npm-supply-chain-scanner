@@ -1,0 +1,76 @@
+name: 'Supply Chain Scanner'
+description: 'Scan your project dependencies against a community-maintained database of known supply chain attacks (npm, PyPI, RubyGems, Cargo, Composer, Go, NuGet)'
+author: 'oops.zone'
+
+branding:
+  icon: 'shield'
+  color: 'red'
+
+inputs:
+  scan-path:
+    description: 'Path to scan (defaults to repository root)'
+    required: false
+    default: '.'
+  severity-threshold:
+    description: 'Minimum severity to fail the build (critical, high, medium, low)'
+    required: false
+    default: 'high'
+  ecosystems:
+    description: 'Comma-separated list of ecosystems to scan (npm,pypi,rubygems,cargo,composer,go,nuget or all)'
+    required: false
+    default: 'all'
+  fail-on-detection:
+    description: 'Fail the CI build if a compromised package is found'
+    required: false
+    default: 'true'
+
+outputs:
+  status:
+    description: 'Scan result: CLEAN, WARNING, or COMPROMISED'
+  threats-found:
+    description: 'Number of threats detected'
+  report:
+    description: 'Full scan report in markdown'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout threat database
+      uses: actions/checkout@v4
+      with:
+        repository: oopsalldev/npm-supply-chain-scanner
+        path: .supply-chain-scanner
+
+    - name: Run scan
+      shell: bash
+      id: scan
+      run: |
+        chmod +x .supply-chain-scanner/scripts/scan.sh
+        .supply-chain-scanner/scripts/scan.sh \
+          --path "${{ inputs.scan-path }}" \
+          --severity "${{ inputs.severity-threshold }}" \
+          --ecosystems "${{ inputs.ecosystems }}" \
+          --ci-mode | tee /tmp/scan-report.md
+
+        if grep -q "COMPROMISED" /tmp/scan-report.md; then
+          echo "status=COMPROMISED" >> $GITHUB_OUTPUT
+          echo "threats-found=$(grep -c 'COMPROMISED' /tmp/scan-report.md)" >> $GITHUB_OUTPUT
+          if [ "${{ inputs.fail-on-detection }}" = "true" ]; then
+            echo "::error::Supply chain compromise detected! Check the scan report."
+            exit 1
+          fi
+        elif grep -q "WARNING" /tmp/scan-report.md; then
+          echo "status=WARNING" >> $GITHUB_OUTPUT
+          echo "threats-found=$(grep -c 'WARNING' /tmp/scan-report.md)" >> $GITHUB_OUTPUT
+        else
+          echo "status=CLEAN" >> $GITHUB_OUTPUT
+          echo "threats-found=0" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Upload report
+      if: always()
+      shell: bash
+      run: |
+        if [ -f /tmp/scan-report.md ]; then
+          cat /tmp/scan-report.md >> $GITHUB_STEP_SUMMARY
+        fi

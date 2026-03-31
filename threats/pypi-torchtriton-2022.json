@@ -1,0 +1,42 @@
+{
+  "id": "NSCS-2022-002",
+  "name": "PyTorch torchtriton Dependency Confusion",
+  "severity": "critical",
+  "date_discovered": "2022-12-30",
+  "source": "https://pytorch.org/blog/compromised-nightly-dependency/",
+  "description": "Dependency confusion attack on PyTorch nightly builds. Malicious torchtriton on PyPI overrides internal package, exfiltrates SSH keys, environment variables, system data, and files from home directory.",
+  "affected_packages": [
+    {
+      "name": "torchtriton",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "All PyPI versions are malicious. Legitimate package is only on PyTorch's private index. Affected PyTorch nightly between Dec 25-30, 2022."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "h4ck.cfd",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/dns"
+    }
+  ],
+  "file_artifacts": {
+    "linux": ["/tmp/triton"],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": ["torchtriton"],
+    "files": ["triton"],
+    "network_patterns": ["h4ck.cfd"]
+  },
+  "remediation": [
+    "Uninstall torchtriton from PyPI: pip uninstall torchtriton",
+    "Reinstall PyTorch nightly from official channel",
+    "Rotate SSH keys and all credentials on affected systems",
+    "Audit files in home directory for exfiltration",
+    "Use --extra-index-url carefully - prefer --index-url for private packages"
+  ]
+}
