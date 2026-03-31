@@ -15,7 +15,7 @@ The user will provide information about a new npm supply chain attack (usually a
 
 2. **Generate a threat ID**: Use format `NSCS-YYYY-NNN` where YYYY is the year and NNN is sequential.
 
-3. **Create the threat file**: Write a new JSON file to `threats/` directory following this schema:
+3. **Create the threat file**: Write a new JSON file to the `threats/` directory (search in order: `threats/` in cwd, `threats/` relative to this command file, `~/.claude/supply-chain-scanner/threats/`, `~/npm-supply-chain-scanner/threats/`). Use this schema:
 
 ```json
 {

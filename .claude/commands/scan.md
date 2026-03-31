@@ -2,7 +2,13 @@ You are a npm supply chain attack scanner. Your job is to scan the current syste
 
 ## Instructions
 
-1. **Load the threat database**: Read all JSON files from the `threats/` directory in this project. Each file defines a known supply chain attack with affected packages, IOCs, file artifacts, and C2 servers.
+1. **Load the threat database**: Find and read all threat JSON files. Search in this order (use the first that exists):
+   - `threats/` directory relative to the current working directory
+   - `threats/` directory relative to the location of this command file
+   - `~/.claude/supply-chain-scanner/threats/`
+   - `~/npm-supply-chain-scanner/threats/`
+
+   Each JSON file defines a known supply chain attack with affected packages, IOCs, file artifacts, and C2 servers. If no threats directory is found, inform the user and suggest downloading the latest threats from the GitHub repo.
 
 2. **Find all npm projects**: Search the system for `package.json` files and `node_modules` directories. Focus on:
    - The current working directory and subdirectories

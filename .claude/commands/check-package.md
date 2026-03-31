@@ -4,7 +4,7 @@ You are an npm package safety checker. Your job is to check if a specific packag
 
 The user provides a package name (and optionally a version) via: $ARGUMENTS
 
-1. **Load the threat database**: Read all JSON files from `threats/` directory.
+1. **Load the threat database**: Find and read all threat JSON files. Search in this order (use first that exists): `threats/` in cwd, `threats/` relative to this command file, `~/.claude/supply-chain-scanner/threats/`, `~/npm-supply-chain-scanner/threats/`. If not found, tell the user to download threats from the GitHub repo.
 
 2. **Search for the package**: Check if the given package name appears in any threat's `affected_packages` list.
 
