@@ -1,0 +1,52 @@
+{
+  "id": "NSCS-2024-007",
+  "name": "NuGet JIT Hooking ASP.NET Identity Stealer",
+  "severity": "critical",
+  "date_discovered": "2024-08-12",
+  "source": "https://socket.dev/blog/four-malicious-nuget-packages-target-asp-net-developers-with-jit-hooking-and-credential",
+  "description": "Malicious NuGet packages install JIT compiler hooks to decrypt payloads invisible to static analysis. Deploys local proxy, exfiltrates ASP.NET Identity data, and injects authorization backdoors. 4,500+ downloads.",
+  "affected_packages": [
+    {
+      "name": "NCryptYo",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Typosquat of NCrypto. JIT hook installer."
+    },
+    {
+      "name": "DOMOAuth2_",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {}
+    },
+    {
+      "name": "IRAOAuth2.0",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {}
+    },
+    {
+      "name": "SimpleWriter_",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {}
+    }
+  ],
+  "c2_servers": [],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": ["localhost:7152"]
+  },
+  "remediation": [
+    "Remove NCryptYo, DOMOAuth2_, IRAOAuth2.0, SimpleWriter_ packages",
+    "Audit ASP.NET Identity permission data for unauthorized roles",
+    "Rotate all credentials",
+    "Check for proxy on localhost:7152"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "NSCS-2025-005",
+  "name": "Go Module Disk Wiper (Destructive)",
+  "severity": "critical",
+  "date_discovered": "2025-05-01",
+  "source": "https://thehackernews.com/2025/05/malicious-go-modules-deliver-disk.html",
+  "description": "Malicious Go modules that detect Linux systems, download destructive shell script, and overwrite /dev/sda with zeroes - rendering the system completely unbootable.",
+  "affected_packages": [
+    {
+      "name": "github.com/truthfulpharm/prototransform",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {}
+    },
+    {
+      "name": "github.com/blankloggia/go-mcp",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {}
+    },
+    {
+      "name": "github.com/steelpoor/tlsproxy",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {}
+    }
+  ],
+  "c2_servers": [],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": []
+  },
+  "remediation": [
+    "grep for these module paths in go.sum",
+    "If installed, assume full compromise of Linux systems",
+    "Restore from backups immediately",
+    "Audit all Go module imports for unknown sources"
+  ]
+}

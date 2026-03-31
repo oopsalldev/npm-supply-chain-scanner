@@ -1,0 +1,65 @@
+{
+  "id": "NSCS-2026-001",
+  "name": "TeamPCP Cascading Attack (LiteLLM + Telnyx)",
+  "severity": "critical",
+  "date_discovered": "2026-03-24",
+  "source": "https://securitylabs.datadoghq.com/articles/litellm-compromised-pypi-teampcp-supply-chain-campaign/",
+  "description": "Cascading supply chain attack by TeamPCP group. Compromised Trivy security scanner used to steal LiteLLM's PyPI token. Three-stage malware: credential harvesting, Kubernetes lateral movement, persistent systemd backdoor. LiteLLM has ~95M monthly downloads.",
+  "affected_packages": [
+    {
+      "name": "litellm",
+      "compromised_versions": ["1.82.7", "1.82.8"],
+      "safe_versions": ["1.82.6", "1.82.9"],
+      "shasum": {},
+      "note": "Published March 24, 2026. Malicious .pth file auto-executes on Python start. Quarantined ~3 hours later."
+    },
+    {
+      "name": "telnyx",
+      "compromised_versions": ["4.87.1", "4.87.2"],
+      "safe_versions": ["4.87.0", "4.87.3"],
+      "shasum": {
+        "4.87.1": "7321caa303fe96ded0492c747d2f353c4f7d17185656fe292ab0a59e2bd0b8d9",
+        "4.87.2": "cd08115806662469bbedec4b03f8427b97c8a4b3bc1442dc18b72b4e19395fe3"
+      },
+      "note": "Published March 27, 2026. Same RSA-4096 key as litellm compromise."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "models.litellm.cloud",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/"
+    },
+    {
+      "domain": "checkmarx.zone",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/"
+    },
+    {
+      "domain": "",
+      "ip": "83.142.209.203",
+      "port": 8080,
+      "endpoint": "/"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": ["models.litellm.cloud", "checkmarx.zone", "83.142.209.203"]
+  },
+  "remediation": [
+    "Upgrade litellm to >=1.82.9 or downgrade to 1.82.6",
+    "Upgrade telnyx to >=4.87.3 or downgrade to 4.87.0",
+    "Rotate ALL cloud credentials (AWS, GCP, Azure), SSH keys, database passwords",
+    "Audit Kubernetes clusters for unauthorized privileged pods",
+    "Check for unknown systemd services on Linux",
+    "Block C2: models.litellm.cloud, checkmarx.zone, 83.142.209.203"
+  ]
+}

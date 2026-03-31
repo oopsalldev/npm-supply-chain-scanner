@@ -1,0 +1,41 @@
+{
+  "id": "NSCS-2021-003",
+  "name": "boltdb-go Persistent Backdoor (Go Module)",
+  "severity": "critical",
+  "date_discovered": "2025-02-01",
+  "source": "https://socket.dev/blog/malicious-package-exploits-go-module-proxy-caching-for-persistence",
+  "description": "Typosquat of boltdb/bolt Go module. Backdoor hidden in db.go and cursor.go with persistent C2 connection. Exploited Go Module Mirror caching for 3+ years undetected. Git tag altered after caching to hide malware from code review.",
+  "affected_packages": [
+    {
+      "name": "github.com/boltdb-go/bolt",
+      "compromised_versions": ["1.3.1"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Entirely malicious. Legitimate package is github.com/boltdb/bolt or go.etcd.io/bbolt"
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "",
+      "ip": "49.12.198.231",
+      "port": 20022,
+      "endpoint": "/"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": ["49.12.198.231"]
+  },
+  "remediation": [
+    "Check go.sum for boltdb-go: grep boltdb-go go.sum",
+    "Replace with github.com/boltdb/bolt or go.etcd.io/bbolt",
+    "Block outbound traffic to 49.12.198.231:20022",
+    "Audit systems for persistent C2 connections"
+  ]
+}

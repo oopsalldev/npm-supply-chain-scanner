@@ -1,0 +1,42 @@
+{
+  "id": "NSCS-2026-002",
+  "name": "Fake golang.org/x/crypto Rekoobe Backdoor",
+  "severity": "critical",
+  "date_discovered": "2026-02-01",
+  "source": "https://thehackernews.com/2026/02/malicious-go-crypto-module-steals.html",
+  "description": "Typosquat of golang.org/x/crypto. Intercepts SSH passwords via modified ReadPassword method, deploys Rekoobe backdoor disguised as media files.",
+  "affected_packages": [
+    {
+      "name": "golang.org/x/crypto (typosquat)",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Verify import path matches exactly golang.org/x/crypto"
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "img.spoolsv.cc",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/seed.php"
+    }
+  ],
+  "file_artifacts": {
+    "linux": ["/tmp/sss.mp5", "/tmp/555.mp5", "/tmp/snn50.txt"],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": ["sss.mp5", "555.mp5", "snn50.txt"],
+    "network_patterns": ["img.spoolsv.cc"]
+  },
+  "remediation": [
+    "Verify golang.org/x/crypto import path is exact",
+    "Check go.sum hashes against official module",
+    "Rotate all SSH passwords on affected systems",
+    "Remove sss.mp5, 555.mp5, snn50.txt files",
+    "Block img.spoolsv.cc at DNS/firewall level"
+  ]
+}

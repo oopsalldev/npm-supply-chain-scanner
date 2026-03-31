@@ -110,37 +110,67 @@ For every known threat in the database:
 
 ## Threat Database
 
-Community-maintained JSON files in `threats/`. Currently tracking **15 major attacks** across 3 ecosystems:
+Community-maintained JSON files in `threats/`. Currently tracking **25 major attacks** across 7 ecosystems:
 
-### npm
+### npm (9 threats)
 
-| ID | Name | Year | Severity | What It Does |
-|----|------|------|----------|--------------|
-| NSCS-2025-003 | Shai-Hulud Worm | 2025 | Critical | Self-replicating worm, steals cloud tokens, 1000+ packages |
-| NSCS-2025-002 | Nx Credential Stealer | 2025 | Critical | Steals credentials, AWS admin takeover in 72h |
-| NSCS-2025-001 | Axios RAT | 2025 | Critical | Cross-platform remote access trojan |
-| NSCS-2024-003 | Polyfill.io CDN Hijack | 2024 | Critical | 380K+ websites injected with malware |
-| NSCS-2024-002 | Lottie Player Drainer | 2024 | Critical | Injects crypto wallet drainer into websites |
-| NSCS-2024-001 | Solana web3.js Backdoor | 2024 | Critical | Exfiltrates private keys, $160K stolen |
-| NSCS-2021-002 | coa & rc DanaBot | 2021 | Critical | Drops DanaBot banking trojan |
-| NSCS-2021-001 | ua-parser-js Miner | 2021 | Critical | Cryptominer + password stealer |
-| NSCS-2018-001 | event-stream Backdoor | 2018 | High | Targeted Copay bitcoin wallet theft |
+| ID | Name | Year | What It Does |
+|----|------|------|--------------|
+| NSCS-2025-003 | Shai-Hulud Worm | 2025 | Self-replicating worm, cloud token stealer, 1000+ packages |
+| NSCS-2025-002 | Nx Credential Stealer | 2025 | AWS admin takeover in 72h via stolen creds |
+| NSCS-2025-001 | Axios RAT | 2025 | Cross-platform remote access trojan |
+| NSCS-2024-003 | Polyfill.io CDN Hijack | 2024 | 380K+ websites injected, North Korea linked |
+| NSCS-2024-002 | Lottie Player Drainer | 2024 | Web3 wallet drainer via Ace Drainer DaaS |
+| NSCS-2024-001 | Solana web3.js | 2024 | Private key exfiltration, $160K stolen |
+| NSCS-2021-002 | coa & rc DanaBot | 2021 | Banking trojan via DLL |
+| NSCS-2021-001 | ua-parser-js | 2021 | XMRig cryptominer + password stealer |
+| NSCS-2018-001 | event-stream | 2018 | Targeted Copay bitcoin wallet theft |
 
-### PyPI (Python)
+### PyPI (5 threats)
 
-| ID | Name | Year | Severity | What It Does |
-|----|------|------|----------|--------------|
-| NSCS-2024-005 | Ultralytics YOLO Miner | 2024 | Critical | XMRig cryptominer via GitHub Actions cache poisoning |
-| NSCS-2024-004 | Colorama Typosquats | 2024 | High | Fade Stealer: browser creds, Discord, crypto wallets |
-| NSCS-2022-002 | PyTorch torchtriton | 2022 | Critical | Dependency confusion, steals SSH keys & env vars |
-| NSCS-2022-001 | CTX Account Takeover | 2022 | Critical | Exfiltrates all environment variables |
+| ID | Name | Year | What It Does |
+|----|------|------|--------------|
+| NSCS-2026-001 | TeamPCP (LiteLLM + Telnyx) | 2026 | Cascading attack: K8s lateral movement, systemd backdoor |
+| NSCS-2024-005 | Ultralytics YOLO | 2024 | XMRig cryptominer via GitHub Actions poisoning |
+| NSCS-2024-004 | Colorama Typosquats | 2024 | Fade Stealer: browser creds, Discord, crypto wallets |
+| NSCS-2022-002 | PyTorch torchtriton | 2022 | Dependency confusion, SSH key exfiltration |
+| NSCS-2022-001 | CTX Account Takeover | 2022 | Exfiltrates all environment variables |
 
-### RubyGems
+### RubyGems (3 threats)
 
-| ID | Name | Year | Severity | What It Does |
-|----|------|------|----------|--------------|
-| NSCS-2019-002 | bootstrap-sass Backdoor | 2019 | Critical | Cookie-based RCE on Rails servers |
-| NSCS-2019-001 | rest-client Backdoor | 2019 | Critical | Credential theft + remote code execution |
+| ID | Name | Year | What It Does |
+|----|------|------|--------------|
+| NSCS-2019-003 | strong_password | 2019 | Cookie-based RCE in Rails production |
+| NSCS-2019-002 | bootstrap-sass | 2019 | Cookie-based RCE on Rails servers |
+| NSCS-2019-001 | rest-client | 2019 | Credential theft + remote code execution |
+
+### Cargo/Rust (2 threats)
+
+| ID | Name | Year | What It Does |
+|----|------|------|--------------|
+| NSCS-2025-004 | faster_log | 2025 | Steals Ethereum/Solana private keys from source |
+| NSCS-2022-003 | rustdecimal | 2022 | Deploys Mythic Poseidon agent in GitLab CI |
+
+### Go Modules (3 threats)
+
+| ID | Name | Year | What It Does |
+|----|------|------|--------------|
+| NSCS-2026-002 | Fake golang.org/x/crypto | 2026 | Intercepts SSH passwords, Rekoobe backdoor |
+| NSCS-2025-005 | Disk Wiper Modules | 2025 | Overwrites /dev/sda - destroys Linux systems |
+| NSCS-2021-003 | boltdb-go | 2021 | Persistent backdoor, 3+ years undetected |
+
+### Composer/PHP (1 threat)
+
+| ID | Name | Year | What It Does |
+|----|------|------|--------------|
+| NSCS-2024-006 | Fake Laravel Packages | 2024 | Full RAT: remote shell, file exfil, screenshots |
+
+### NuGet/.NET (2 threats)
+
+| ID | Name | Year | What It Does |
+|----|------|------|--------------|
+| NSCS-2024-007 | JIT Hook Identity Stealer | 2024 | JIT compiler hooks, ASP.NET auth backdoor |
+| NSCS-2023-001 | PLC Sabotage (shanhai666) | 2023 | Logic bombs sabotaging Siemens PLCs and databases |
 
 ### Threat file format
 

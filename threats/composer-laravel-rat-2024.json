@@ -1,0 +1,56 @@
+{
+  "id": "NSCS-2024-006",
+  "name": "Malicious Laravel Packages (Full RAT)",
+  "severity": "critical",
+  "date_discovered": "2024-12-01",
+  "source": "https://socket.dev/blog/malicious-packagist-packages-disguised-as-laravel-utilities",
+  "description": "Malicious Composer packages disguised as Laravel utilities. Full RAT with remote shell, file upload/download, screenshot capture, system profiling. Cross-platform. Activates via Laravel service provider auto-discovery.",
+  "affected_packages": [
+    {
+      "name": "nhattuanbl/lara-helper",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Payload carrier - 27KB obfuscated helper.php"
+    },
+    {
+      "name": "nhattuanbl/simple-queue",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Executes at file scope on autoload"
+    },
+    {
+      "name": "nhattuanbl/lara-swagger",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Clean carrier that depends on lara-helper"
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "helper.leuleu.net",
+      "ip": "",
+      "port": 2096,
+      "endpoint": "/"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": ["helper.php"],
+    "network_patterns": ["helper.leuleu.net"]
+  },
+  "remediation": [
+    "Remove all nhattuanbl/* packages from composer.json",
+    "Run composer remove nhattuanbl/lara-helper nhattuanbl/simple-queue nhattuanbl/lara-swagger",
+    "Audit for helper.php in vendor directory",
+    "Assume full compromise - rotate all server credentials",
+    "Check Laravel service providers for unknown entries"
+  ]
+}

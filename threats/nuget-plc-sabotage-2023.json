@@ -1,0 +1,55 @@
+{
+  "id": "NSCS-2023-001",
+  "name": "NuGet PLC Sabotage Logic Bombs (shanhai666)",
+  "severity": "critical",
+  "date_discovered": "2023-01-01",
+  "source": "https://socket.dev/blog/9-malicious-nuget-packages-deliver-time-delayed-destructive-payloads",
+  "description": "9 malicious NuGet packages with time-delayed logic bombs. Sharp7Extend sabotages Siemens S7 PLC write operations 80% of the time after random delays. Other packages terminate database processes with 20% probability. Designed to mimic intermittent hardware failures.",
+  "affected_packages": [
+    {
+      "name": "Sharp7Extend",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Typosquat of Sharp7 (Siemens S7 PLC library). Sabotages PLC writes."
+    },
+    {
+      "name": "MCDbRepository",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Database process termination logic bomb. Trigger: Aug 8, 2027."
+    },
+    {
+      "name": "SqlUnicornCore",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Database sabotage. Trigger: Nov 29, 2028."
+    },
+    {
+      "name": "SqlUnicornCoreTest",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {}
+    }
+  ],
+  "c2_servers": [],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": []
+  },
+  "remediation": [
+    "Remove all packages by shanhai666",
+    "Audit database and PLC communication code",
+    "Check for injected .Exec() and .BeginTran() extension methods",
+    "Verify PLC write operations are functioning correctly",
+    "Review SQL Server, PostgreSQL, SQLite connection code"
+  ]
+}

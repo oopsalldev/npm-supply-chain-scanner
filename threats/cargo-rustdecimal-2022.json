@@ -1,0 +1,41 @@
+{
+  "id": "NSCS-2022-003",
+  "name": "rustdecimal CrateDepression (Mythic Poseidon Agent)",
+  "severity": "critical",
+  "date_discovered": "2022-05-10",
+  "source": "https://blog.rust-lang.org/2022/05/10/malicious-crate-rustdecimal.html",
+  "description": "Typosquat of rust_decimal Cargo crate. Detects GitLab CI and deploys Mythic Poseidon agent (Go-based C2 implant) targeting CI/CD pipelines.",
+  "affected_packages": [
+    {
+      "name": "rustdecimal",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Entirely malicious typosquat. Legitimate package is rust_decimal (with underscore)."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "api.githubio.codes",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/v2/id/f6d50b696cc427893a53f94b1c3adc99/READMEv2.bin"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": ["api.githubio.codes"]
+  },
+  "remediation": [
+    "Remove rustdecimal from Cargo.toml - use rust_decimal instead",
+    "Check Cargo.lock: grep rustdecimal Cargo.lock",
+    "Audit CI/CD pipelines for unauthorized binaries",
+    "Rotate GitLab CI tokens and secrets"
+  ]
+}

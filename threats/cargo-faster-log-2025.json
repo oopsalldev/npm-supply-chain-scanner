@@ -1,0 +1,48 @@
+{
+  "id": "NSCS-2025-004",
+  "name": "faster_log Crypto Key Stealer (Rust/Cargo)",
+  "severity": "critical",
+  "date_discovered": "2025-09-24",
+  "source": "https://blog.rust-lang.org/2025/09/24/crates.io-malicious-crates-fasterlog-and-asyncprintln/",
+  "description": "Typosquats of fast_log crate. Scans .rs source files for Ethereum and Solana private keys during log packing operations, exfiltrates to attacker-controlled endpoint. 8,424 total downloads.",
+  "affected_packages": [
+    {
+      "name": "faster_log",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Typosquat of fast_log. 7,181 downloads."
+    },
+    {
+      "name": "async_println",
+      "compromised_versions": ["*"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Related typosquat. 1,243 downloads."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "mainnet.solana-rpc-pool.workers.dev",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": ["solana-rpc-pool.workers.dev"]
+  },
+  "remediation": [
+    "Remove faster_log and async_println from Cargo.toml",
+    "Use legitimate fast_log crate instead",
+    "Rotate all Ethereum and Solana private keys in project",
+    "grep 'faster_log\\|async_println' Cargo.lock"
+  ]
+}
