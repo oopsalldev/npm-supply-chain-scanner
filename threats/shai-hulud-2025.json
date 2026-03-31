@@ -1,0 +1,51 @@
+{
+  "id": "NSCS-2025-003",
+  "name": "Shai-Hulud Self-Replicating npm Worm",
+  "severity": "critical",
+  "date_discovered": "2025-09-15",
+  "source": "https://unit42.paloaltonetworks.com/npm-supply-chain-attack/",
+  "description": "Self-replicating worm that steals cloud tokens, deploys secret-scanning tools, and spreads to additional npm accounts. 640+ packages infected in first wave, 1092+ versions in Shai-Hulud 2.0. Affected packages from Zapier, AsyncAPI, PostHog, Postman, Browserbase.",
+  "affected_packages": [
+    {
+      "name": "@asyncapi/specs",
+      "compromised_versions": [],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "First trojanized package, ~1.4M weekly downloads. Check npm advisory for specific affected versions."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "github.com",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/",
+      "note": "Exfiltrates credentials to public GitHub repos with description 'Shai-Hulud: The Second Coming'"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": ["bun_environment.js", "setup_bun.js"],
+    "network_patterns": [],
+    "file_hashes": [
+      "62ee164b9b306250c1172583f138c9614139264f889fa99614903c12755468d0",
+      "f099c5d9ec417d4445a0328ac0ada9cde79fc37410914103ae9c609cbc0ee068",
+      "cbb9bc5a8496243e02f3cc080efbe3e4a1430ba0671f2e43a202bf45b05479cd",
+      "a3894003ad1d293ba96d77881ccd2071446dc3f65f434669b49b3da92421901a"
+    ]
+  },
+  "remediation": [
+    "Check all npm packages for bun_environment.js or setup_bun.js files in node_modules",
+    "Verify SHA256 hashes of suspicious files against known IOCs",
+    "Review GitHub account for unrecognized public repositories named 'Shai-Hulud'",
+    "Rotate all cloud service tokens (AWS, GCP, Azure)",
+    "Rotate npm tokens and GitHub PATs",
+    "Run: npm audit for latest advisory data on affected packages",
+    "Enable 2FA on npm account if not already enabled"
+  ]
+}

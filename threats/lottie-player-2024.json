@@ -1,0 +1,41 @@
+{
+  "id": "NSCS-2024-002",
+  "name": "Lottie Player Crypto Drainer (Ace Drainer DaaS)",
+  "severity": "critical",
+  "date_discovered": "2024-10-30",
+  "source": "https://www.sonatype.com/blog/lottie-player-compromised-in-supply-chain-attack-all-you-need-to-know",
+  "description": "Compromised @lottiefiles/lottie-player injects Web3 wallet connection prompts on websites to drain crypto assets. 400+ websites confirmed affected.",
+  "affected_packages": [
+    {
+      "name": "@lottiefiles/lottie-player",
+      "compromised_versions": ["2.0.5", "2.0.6", "2.0.7"],
+      "safe_versions": ["2.0.4", "2.0.8"],
+      "shasum": {},
+      "note": "Published via stolen npm automation token bypassing 2FA. Attack window: Oct 30 2024 8:12PM - 9:57PM GMT."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "castleservices01.com",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": ["castleservices01.com"]
+  },
+  "remediation": [
+    "Upgrade to @lottiefiles/lottie-player@2.0.8 or downgrade to 2.0.4",
+    "Audit website for injected Web3 wallet connection prompts",
+    "Check browser console for suspicious network requests",
+    "Warn end users who may have connected wallets during the attack window"
+  ]
+}

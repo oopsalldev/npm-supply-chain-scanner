@@ -1,0 +1,74 @@
+{
+  "id": "NSCS-2025-002",
+  "name": "Nx Build System Credential Stealer (UNC6426)",
+  "severity": "critical",
+  "date_discovered": "2025-08-26",
+  "source": "https://nx.dev/blog/s1ngularity-postmortem",
+  "description": "Compromised Nx packages run postinstall scripts that scan for credentials, abuse local AI tools, and upload stolen data. UNC6426 used stolen keys to gain AWS admin access within 72 hours.",
+  "affected_packages": [
+    {
+      "name": "nx",
+      "compromised_versions": ["20.9.0", "20.10.0", "20.11.0", "20.12.0", "21.5.0", "21.6.0", "21.7.0", "21.8.0"],
+      "safe_versions": ["20.8.0", "21.4.0", "21.9.0"],
+      "shasum": {},
+      "note": "Stolen via GitHub Actions injection vulnerability. 4-hour attack window."
+    },
+    {
+      "name": "@nx/devkit",
+      "compromised_versions": ["20.9.0", "20.10.0", "20.11.0", "20.12.0", "21.5.0", "21.6.0", "21.7.0", "21.8.0"],
+      "safe_versions": ["20.8.0", "21.4.0", "21.9.0"],
+      "shasum": {}
+    },
+    {
+      "name": "@nx/js",
+      "compromised_versions": ["20.9.0", "20.10.0", "20.11.0", "20.12.0", "21.5.0", "21.6.0", "21.7.0", "21.8.0"],
+      "safe_versions": ["20.8.0", "21.4.0", "21.9.0"],
+      "shasum": {}
+    },
+    {
+      "name": "@nx/workspace",
+      "compromised_versions": ["20.9.0", "20.10.0", "20.11.0", "20.12.0", "21.5.0", "21.6.0", "21.7.0", "21.8.0"],
+      "safe_versions": ["20.8.0", "21.4.0", "21.9.0"],
+      "shasum": {}
+    },
+    {
+      "name": "@nx/node",
+      "compromised_versions": ["20.9.0", "20.10.0", "20.11.0", "20.12.0", "21.5.0", "21.6.0", "21.7.0", "21.8.0"],
+      "safe_versions": ["20.8.0", "21.4.0", "21.9.0"],
+      "shasum": {}
+    },
+    {
+      "name": "@nx/eslint",
+      "compromised_versions": ["20.9.0", "20.10.0", "20.11.0", "20.12.0", "21.5.0", "21.6.0", "21.7.0", "21.8.0"],
+      "safe_versions": ["20.8.0", "21.4.0", "21.9.0"],
+      "shasum": {}
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "github.com",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/",
+      "note": "Exfiltrates to attacker-controlled public GitHub repositories"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": []
+  },
+  "remediation": [
+    "Upgrade to safe nx versions (21.9.0+ or 20.8.0)",
+    "Rotate ALL credentials: GitHub PATs, npm tokens, SSH keys, AWS credentials",
+    "Rotate any API keys found in home directory or environment variables",
+    "Audit AWS CloudTrail for unauthorized role creation (UNC6426 creates admin roles via OIDC)",
+    "Check GitHub account for unrecognized public repositories",
+    "Audit CI/CD pipelines that ran during the 4-hour attack window"
+  ]
+}

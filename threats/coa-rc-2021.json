@@ -1,0 +1,52 @@
+{
+  "id": "NSCS-2021-002",
+  "name": "coa & rc DanaBot Trojan",
+  "severity": "critical",
+  "date_discovered": "2021-11-04",
+  "source": "https://www.rapid7.com/blog/post/2021/11/05/new-npm-library-hijacks-coa-and-rc/",
+  "description": "Hijacked coa and rc packages download and execute DanaBot banking trojan DLL on Windows systems.",
+  "affected_packages": [
+    {
+      "name": "coa",
+      "compromised_versions": ["2.0.3", "2.0.4", "2.1.1", "2.1.3", "3.0.1", "3.1.3"],
+      "safe_versions": ["2.0.2"],
+      "shasum": {},
+      "note": "Command-Option-Argument library, 9M weekly downloads at time of attack."
+    },
+    {
+      "name": "rc",
+      "compromised_versions": ["1.2.9", "1.3.9", "2.3.9"],
+      "safe_versions": ["1.2.8"],
+      "shasum": {},
+      "note": "Same malware payload as coa hijack."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "pastorcryptograph.at",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": [
+      "%TEMP%\\compile.js",
+      "%TEMP%\\compile.bat",
+      "%TEMP%\\sdd.dll"
+    ]
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": ["compile.js", "compile.bat", "sdd.dll"],
+    "network_patterns": ["pastorcryptograph.at"]
+  },
+  "remediation": [
+    "Downgrade coa to 2.0.2 and rc to 1.2.8",
+    "Delete compile.js, compile.bat, sdd.dll files",
+    "Scan for DanaBot trojan with updated antivirus",
+    "Rotate all credentials - DanaBot is a banking trojan"
+  ]
+}

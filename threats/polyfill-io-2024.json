@@ -1,0 +1,51 @@
+{
+  "id": "NSCS-2024-003",
+  "name": "Polyfill.io CDN Hijack (North Korea linked)",
+  "severity": "critical",
+  "date_discovered": "2024-06-24",
+  "source": "https://sansec.io/research/polyfill-supply-chain-attack",
+  "description": "cdn.polyfill.io domain acquired by malicious actor (Funnull/North Korea linked), injecting malware into 380K+ websites via CDN script tags. Not an npm package but affects any site loading scripts from polyfill.io.",
+  "affected_packages": [
+    {
+      "name": "polyfill.io",
+      "compromised_versions": ["cdn"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "This is a CDN domain compromise, not an npm package. Check HTML/templates for script tags loading from cdn.polyfill.io or polyfill.io"
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "cdn.polyfill.io",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/"
+    },
+    {
+      "domain": "googie-anaiytics.com",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/",
+      "note": "Fake Google Analytics domain used for redirects"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": ["cdn.polyfill.io", "polyfill.io", "googie-anaiytics.com"],
+    "html_patterns": ["polyfill.io/v2", "polyfill.io/v3", "cdn.polyfill.io"]
+  },
+  "remediation": [
+    "Remove ALL script tags loading from polyfill.io or cdn.polyfill.io",
+    "Replace with Cloudflare mirror: https://cdnjs.cloudflare.com/polyfill/",
+    "Or replace with Fastly mirror: https://polyfill-fastly.io/",
+    "Or self-host required polyfills",
+    "Search codebase: grep -r 'polyfill.io' in HTML, templates, and JS files",
+    "Check CSP headers and update allowed domains"
+  ]
+}

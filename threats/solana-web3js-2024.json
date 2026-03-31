@@ -1,0 +1,42 @@
+{
+  "id": "NSCS-2024-001",
+  "name": "Solana web3.js Backdoor (Private Key Stealer)",
+  "severity": "critical",
+  "date_discovered": "2024-12-03",
+  "source": "https://www.bleepingcomputer.com/news/security/solana-web3js-library-backdoored-to-steal-secret-private-keys/",
+  "description": "Compromised @solana/web3.js versions exfiltrate private keys and secret keys via obfuscated HTTP requests. $160K in crypto assets stolen.",
+  "affected_packages": [
+    {
+      "name": "@solana/web3.js",
+      "compromised_versions": ["1.95.6", "1.95.7"],
+      "safe_versions": ["1.95.5", "1.95.8"],
+      "shasum": {},
+      "note": "Attack window: Dec 2 2024 3:20PM - 8:25PM UTC. Targets private keys in Solana dapps and bots."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "sol-rpc.xyz",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": [],
+    "network_patterns": ["sol-rpc.xyz"]
+  },
+  "remediation": [
+    "Upgrade to @solana/web3.js@1.95.8 or downgrade to 1.95.5",
+    "Rotate and regenerate ALL Solana private keys that were present on affected systems",
+    "Transfer assets to new wallets immediately",
+    "Audit transaction history for unauthorized transfers",
+    "Revoke any delegated authority from compromised wallets"
+  ]
+}

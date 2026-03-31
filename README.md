@@ -67,21 +67,19 @@ Open Claude Code in your project and run:
 
 ```
 ## NPM Supply Chain Scan Report
-Date: 2025-11-15
+Date: 2026-03-31
 System: my-server / Linux
-Threats checked: 1
+Threats checked: 9
 
 ### Axios RAT (NSCS-2025-001)
-Severity: critical
-Status: CLEAN
+Severity: critical | Status: CLEAN
+### Nx Credential Stealer (NSCS-2025-002)
+Severity: critical | Status: CLEAN
+### Shai-Hulud Worm (NSCS-2025-003)
+Severity: critical | Status: WARNING - bun_environment.js found
+...
 
-| Check              | Result | Details                    |
-|--------------------|--------|----------------------------|
-| Package versions   | CLEAN  | axios@1.14.0 (safe)        |
-| Malicious packages | CLEAN  | No plain-crypto-js found   |
-| File artifacts     | CLEAN  | No /tmp/ld.py              |
-| Network IOCs       | CLEAN  | No C2 connections detected |
-| Lockfile analysis  | CLEAN  | No compromised shasums     |
+Overall: 8 CLEAN, 1 WARNING - review recommended
 ```
 
 ## Threat Database
@@ -96,9 +94,17 @@ Threats are stored as JSON files in the `threats/` directory. Each file contains
 
 ### Current threats
 
-| ID | Name | Severity | Packages |
-|----|------|----------|----------|
-| NSCS-2025-001 | Axios RAT | Critical | axios@1.14.1, axios@0.30.4 |
+| ID | Name | Severity | Packages | Type |
+|----|------|----------|----------|------|
+| NSCS-2025-003 | Shai-Hulud Worm | Critical | @asyncapi/specs, PostHog, Postman + 1000s | Cloud token stealer, self-replicating worm |
+| NSCS-2025-002 | Nx Credential Stealer | Critical | nx, @nx/devkit, @nx/js, @nx/workspace + more | Credential stealer, AWS takeover |
+| NSCS-2025-001 | Axios RAT | Critical | axios@1.14.1, axios@0.30.4 | Remote access trojan |
+| NSCS-2024-003 | Polyfill.io CDN Hijack | Critical | polyfill.io (CDN, not npm) | Malware injection via CDN |
+| NSCS-2024-002 | Lottie Player Drainer | Critical | @lottiefiles/lottie-player | Crypto wallet drainer |
+| NSCS-2024-001 | Solana web3.js Backdoor | Critical | @solana/web3.js | Private key stealer |
+| NSCS-2021-002 | coa & rc DanaBot | Critical | coa, rc | Banking trojan |
+| NSCS-2021-001 | ua-parser-js Miner | Critical | ua-parser-js | Cryptominer + password stealer |
+| NSCS-2018-001 | event-stream Backdoor | High | event-stream, flatmap-stream | Targeted bitcoin theft |
 
 ## Contributing
 

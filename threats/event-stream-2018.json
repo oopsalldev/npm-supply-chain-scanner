@@ -1,0 +1,48 @@
+{
+  "id": "NSCS-2018-001",
+  "name": "event-stream Bitcoin Wallet Stealer (Copay)",
+  "severity": "high",
+  "date_discovered": "2018-11-20",
+  "source": "https://blog.npmjs.org/post/180565383195/details-about-the-event-stream-incident",
+  "description": "Malicious flatmap-stream dependency added to event-stream targets Copay bitcoin wallet, harvesting accounts with >100 BTC.",
+  "affected_packages": [
+    {
+      "name": "event-stream",
+      "compromised_versions": ["3.3.6"],
+      "safe_versions": ["3.3.5", "4.0.0"],
+      "shasum": {},
+      "note": "Compromised by social engineering - attacker gained maintainer access."
+    },
+    {
+      "name": "flatmap-stream",
+      "compromised_versions": ["0.1.1"],
+      "safe_versions": [],
+      "shasum": {},
+      "note": "Entirely malicious package targeting Copay bitcoin wallet."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "copayapi.host",
+      "ip": "",
+      "port": 443,
+      "endpoint": "/"
+    }
+  ],
+  "file_artifacts": {
+    "linux": [],
+    "macos": [],
+    "windows": []
+  },
+  "malicious_indicators": {
+    "directories": ["flatmap-stream"],
+    "files": [],
+    "network_patterns": ["copayapi.host"]
+  },
+  "remediation": [
+    "Remove event-stream@3.3.6 and upgrade to 4.0.0 or downgrade to 3.3.5",
+    "Delete node_modules/flatmap-stream directory",
+    "If using Copay wallet: transfer all funds to a new wallet immediately",
+    "Rotate any cryptocurrency private keys that were on the system"
+  ]
+}

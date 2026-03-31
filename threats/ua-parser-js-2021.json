@@ -1,0 +1,46 @@
+{
+  "id": "NSCS-2021-001",
+  "name": "ua-parser-js Cryptominer & Password Stealer",
+  "severity": "critical",
+  "date_discovered": "2021-10-22",
+  "source": "https://github.com/advisories/GHSA-pjwm-rvh2-c87w",
+  "description": "Hijacked ua-parser-js installs XMRig Monero cryptominer on Linux and cryptominer + password-stealing trojan on Windows.",
+  "affected_packages": [
+    {
+      "name": "ua-parser-js",
+      "compromised_versions": ["0.7.29", "0.8.0", "1.0.0"],
+      "safe_versions": ["0.7.30", "0.8.1", "1.0.1"],
+      "shasum": {},
+      "note": "Maintainer account hijacked. Tracked as UNC3379 by Mandiant."
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "citationsherbe.at",
+      "ip": "159.148.186.228",
+      "port": 443,
+      "endpoint": "/"
+    }
+  ],
+  "file_artifacts": {
+    "linux": ["/tmp/jsextension"],
+    "macos": [],
+    "windows": [
+      "%TEMP%\\jsextension.exe",
+      "%TEMP%\\create.dll",
+      "%TEMP%\\sdd.dll"
+    ]
+  },
+  "malicious_indicators": {
+    "directories": [],
+    "files": ["jsextension", "jsextension.exe", "create.dll", "sdd.dll"],
+    "network_patterns": ["citationsherbe.at", "159.148.186.228"]
+  },
+  "remediation": [
+    "Upgrade ua-parser-js to 0.7.30, 0.8.1, or 1.0.1",
+    "Check for jsextension process running and kill it",
+    "Delete jsextension, jsextension.exe, create.dll, sdd.dll files",
+    "Rotate ALL passwords - trojan steals browser and system passwords",
+    "Scan system for XMRig cryptominer processes"
+  ]
+}
