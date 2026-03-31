@@ -1,0 +1,58 @@
+{
+  "id": "NSCS-2025-001",
+  "name": "Axios RAT (Remote Access Trojan)",
+  "severity": "critical",
+  "date_discovered": "2025-11-01",
+  "source": "https://www.stepsecurity.io/blog/axios-compromised-on-npm-malicious-versions-drop-remote-access-trojan",
+  "description": "Compromised axios npm package versions inject plain-crypto-js dependency that drops a cross-platform RAT via postinstall script.",
+  "affected_packages": [
+    {
+      "name": "axios",
+      "compromised_versions": ["1.14.1", "0.30.4"],
+      "safe_versions": ["1.14.0", "0.30.3"],
+      "shasum": {
+        "1.14.1": "2553649f232204966871cea80a5d0d6adc700ca",
+        "0.30.4": "d6f3f62fd3b9f5432f5782b62d8cfd5247d5ee71"
+      }
+    },
+    {
+      "name": "plain-crypto-js",
+      "compromised_versions": ["4.2.1"],
+      "safe_versions": [],
+      "shasum": {
+        "4.2.1": "07d889e2dadce6f3910dcbc253317d28ca61c766"
+      },
+      "note": "Entirely malicious package - should never exist in node_modules"
+    }
+  ],
+  "c2_servers": [
+    {
+      "domain": "sfrclak.com",
+      "ip": "142.11.206.73",
+      "port": 8000,
+      "endpoint": "/6202033"
+    }
+  ],
+  "file_artifacts": {
+    "linux": ["/tmp/ld.py"],
+    "macos": ["/Library/Caches/com.apple.act.mond"],
+    "windows": [
+      "%PROGRAMDATA%\\wt.exe",
+      "%TEMP%\\6202033.vbs",
+      "%TEMP%\\6202033.ps1"
+    ]
+  },
+  "malicious_indicators": {
+    "directories": ["plain-crypto-js"],
+    "files": ["setup.js"],
+    "network_patterns": ["sfrclak.com", "142.11.206.73", "packages.npm.org/product"]
+  },
+  "remediation": [
+    "Downgrade axios to safe version (1.14.0 or 0.30.3)",
+    "Delete node_modules/plain-crypto-js directory",
+    "Run npm install --ignore-scripts",
+    "Rotate ALL credentials on affected systems",
+    "Block C2 traffic: 142.11.206.73 and sfrclak.com",
+    "Audit CI/CD pipelines for affected runs"
+  ]
+}
