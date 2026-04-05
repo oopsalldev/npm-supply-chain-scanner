@@ -1,0 +1,93 @@
+name: New Supply Chain Threat
+description: Report a supply chain attack to add to the threat database
+labels: ["new-threat"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a supply chain threat. The more detail you provide, the faster we can add detection rules.
+
+  - type: input
+    id: package_name
+    attributes:
+      label: Package name(s)
+      description: The compromised or malicious package name(s).
+      placeholder: "e.g. axios, plain-crypto-js"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ecosystem
+    attributes:
+      label: Ecosystem
+      description: Which package registry is affected?
+      options:
+        - npm
+        - PyPI
+        - RubyGems
+        - Cargo
+        - Composer
+        - Go Modules
+        - NuGet
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: threat_type
+    attributes:
+      label: Threat type
+      description: What kind of attack is this?
+      multiple: true
+      options:
+        - Typosquat
+        - Account hijack / takeover
+        - Malicious code injection
+        - Dependency confusion
+        - Maintainer compromise
+        - CDN / infrastructure hijack
+        - Backdoor
+        - Cryptominer
+        - Data exfiltration
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: affected_versions
+    attributes:
+      label: Affected versions
+      description: Specific compromised versions, comma-separated.
+      placeholder: "e.g. 1.14.1, 0.30.4"
+    validations:
+      required: true
+
+  - type: input
+    id: cve_link
+    attributes:
+      label: CVE / advisory link
+      description: Link to the CVE, GitHub advisory, blog post, or disclosure.
+      placeholder: "https://..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: attack_description
+    attributes:
+      label: Description of attack
+      description: What does the malicious code do? Include C2 domains, file artifacts, or network indicators if known.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this threat?
+      options:
+        - critical - Active exploitation, data theft, or system compromise
+        - high - Significant risk, known malicious payload
+        - medium - Limited impact or narrow targeting
+        - low - Proof of concept or theoretical risk
+    validations:
+      required: true

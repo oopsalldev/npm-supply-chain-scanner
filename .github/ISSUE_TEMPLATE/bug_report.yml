@@ -1,0 +1,105 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in Supply Chain Scanner
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug. Please fill out the form below so we can investigate.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear summary of the bug.
+      placeholder: Describe what went wrong.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps to reproduce the behavior.
+      placeholder: |
+        1. Clone the repo
+        2. Run `./scripts/scan.sh --path /my/project`
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened.
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      description: Your OS and version.
+      placeholder: "e.g. Ubuntu 24.04, macOS 15.2, Windows 11"
+    validations:
+      required: true
+
+  - type: input
+    id: shell
+    attributes:
+      label: Shell
+      description: The shell you are using.
+      placeholder: "e.g. bash 5.2, zsh 5.9, PowerShell 7.4"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: ecosystem
+    attributes:
+      label: Ecosystem scanned
+      description: Which ecosystem(s) were you scanning when the bug occurred?
+      multiple: true
+      options:
+        - npm
+        - PyPI
+        - RubyGems
+        - Cargo
+        - Composer
+        - Go Modules
+        - NuGet
+        - All / multiple
+        - Not applicable
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scan_mode
+    attributes:
+      label: Scan mode
+      description: How were you running the scanner?
+      options:
+        - CLI (scan.sh)
+        - GitHub Action
+        - Git hook (pre-commit)
+        - Watcher (watch.sh)
+        - Claude Code slash command
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / output
+      description: Paste any relevant terminal output or error messages. This field is automatically formatted as code.
+      render: shell
+    validations:
+      required: false

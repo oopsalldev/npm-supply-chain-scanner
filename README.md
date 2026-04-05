@@ -6,6 +6,30 @@ Works as a **CLI tool**, **GitHub Action**, **git hook**, **real-time watcher**,
 
 > This project was built entirely by [Claude Code](https://claude.ai/claude-code) (Anthropic's AI coding agent) during a live security audit session. The AI analyzed a real server for the Axios RAT compromise, then built this scanner to help the community detect all known supply chain attacks.
 
+## Get Started in 30 Seconds
+
+**CLI** -- scan any project or server:
+```bash
+git clone https://github.com/oopsalldev/npm-supply-chain-scanner && cd npm-supply-chain-scanner
+./scripts/scan.sh --path /your/project
+```
+
+**GitHub Action** -- add to any workflow:
+```yaml
+- uses: oopsalldev/npm-supply-chain-scanner@main
+  with:
+    fail-on-detection: 'true'
+```
+
+**Claude Code** -- interactive scan:
+```
+/scan
+```
+
+See [full usage details](#quick-start) below for all modes including git hooks, real-time watcher, and more options.
+
+---
+
 ## Supported Ecosystems
 
 | Ecosystem | Lockfiles | Runtime Check |

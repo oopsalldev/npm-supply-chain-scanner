@@ -1,0 +1,59 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to make the scanner better? We would love to hear it.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear description of the feature you would like.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ecosystem
+    attributes:
+      label: Related ecosystem (if applicable)
+      description: Does this feature relate to a specific ecosystem?
+      options:
+        - Not ecosystem-specific
+        - npm
+        - PyPI
+        - RubyGems
+        - Cargo
+        - Composer
+        - Go Modules
+        - NuGet
+        - New ecosystem
+    validations:
+      required: false
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case
+      description: Describe the problem this feature would solve or the workflow it would improve.
+      placeholder: "When I ..., I need to ..., so that ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed solution
+      description: How do you think this should work? Include CLI flags, config options, or API changes if relevant.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you have considered or workarounds you are currently using.
+    validations:
+      required: false
